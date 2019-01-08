@@ -11,7 +11,15 @@ public class LocalHost {
 			InetAddress inetAddress = InetAddress.getLocalHost();
 			
 			String hostName = inetAddress.getHostName();
-			System.out.println(hostName);
+			String hostAddress = inetAddress.getHostAddress();
+			
+			System.out.println(hostName+" : "+hostAddress);
+			
+			byte[] addresses = inetAddress.getAddress();
+			for(byte address : addresses) {
+				System.out.print(address & 0x000000ff);
+				System.out.print(".");
+			}
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
