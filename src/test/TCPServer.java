@@ -24,8 +24,12 @@ public class TCPServer {
 			
 			// 3. Accept : 클라이언트로부터 소켓 연결이 올 때까지 대기한다.
 			Socket socket = serverSocket.accept();	//Blocking
+			InetSocketAddress inetRemoteSocketAddress = (InetSocketAddress)socket.getRemoteSocketAddress();
+			String remoteHostAddress = inetRemoteSocketAddress.getAddress().getHostAddress();
+			int remotePort = inetRemoteSocketAddress.getPort();
 			
-			System.out.println("[server] connected by Client");
+			
+			System.out.println("[server] connected by Client["+remoteHostAddress+":"+remotePort+"]");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
