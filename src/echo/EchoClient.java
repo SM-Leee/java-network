@@ -16,7 +16,7 @@ public class EchoClient {
 	public static void main(String[] args) {
 
 		Socket socket = null;
-
+		Scanner sc = new Scanner(System.in); 
 		try {
 			socket = new Socket();
 			socket.connect(new InetSocketAddress(SERVER_IP,PORT));
@@ -25,13 +25,11 @@ public class EchoClient {
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(),"UTF-8"));
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(),"utf-8"),true);
 			
-			Scanner sc = new Scanner(System.in); 
 			while(true) {
 				System.out.print(">>");
 				String data = sc.nextLine();
 				
 				if("exit".equals(data)) {
-					System.out.println("[client] 서버로부터 접속이 끊어졌습니다.");
 					break;
 				}
 				pw.println(data);
@@ -49,6 +47,9 @@ public class EchoClient {
 			e.printStackTrace();
 		} finally {
 			try {
+				if(sc != null) {
+					sc.close();
+				}
 				if(socket != null && socket.isClosed() ==false) {
 					socket.close();
 				}
