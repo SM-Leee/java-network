@@ -49,6 +49,7 @@ public class RequestHandler extends Thread {
 				//consoleLog(line);
 			}
 			
+			consoleLog(request);
 			String[] tokens = request.split(" ");
 			if("GET".equals(tokens[0])) {
 				responseStaticResource(outputStream, tokens[1],tokens[2]);
@@ -91,11 +92,11 @@ public class RequestHandler extends Thread {
 	}
 	
 	private void responseStaticResource (OutputStream outputStream, String url, String protocol) throws IOException {
-		File file = new File("./webapp"+url);
-		
 		if("/".equals(url)) {
 			url = "/index.html";
 		}
+
+		File file = new File("./webapp"+url);
 		
 		if(file.exists() == false) {
 			response404Error(outputStream, protocol);
