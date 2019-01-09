@@ -48,12 +48,19 @@ public class RequestHandler extends Thread {
 				
 				//consoleLog(line);
 			}
-			consoleLog(request);
 			
 			String[] tokens = request.split(" ");
 			if("GET".equals(tokens[0])) {
 				responseStaticResource(outputStream, tokens[1],tokens[2]);
 			} else {
+				//POST, DELETE, PUT, ETC 명령
+				response400Error(outputStream, tokens[2]);
+				/* 
+				 * HTTP/1.0 400 Bad Request\r\n 
+				 * "Content-Type:text/html; charset=utf-8\r\n"
+				 * \r\n
+				 * 
+				 *  */
 				
 			}
 					
@@ -85,6 +92,11 @@ public class RequestHandler extends Thread {
 	
 	private void responseStaticResource (OutputStream outputStream, String url, String protocol) throws IOException {
 		File file = new File("./webapp"+url);
+		
+		if("/".equals(url)) {
+			url = "/index.html";
+		}
+		
 		if(file.exists() == false) {
 			response404Error(outputStream, protocol);
 			//HTTP/1.0 404 File Not Found\r\n
@@ -107,7 +119,21 @@ public class RequestHandler extends Thread {
 		try {	
 			File file = new File("./webapp/error/404.html");
 			byte[] body = Files.readAllBytes(file.toPath());
-			outputStream.write( "HTTP/1.1 404 File Not Found\r\n".getBytes("UTF-8"));
+			outputStream.write( (protocol+" 404 File Not Found\r\n").getBytes("UTF-8"));
+			outputStream.write("Content-Type:text/html; charset=utf-8\r\n".getBytes("UTF-8"));
+			outputStream.write("\r\n".getBytes());
+			outputStream.write(body);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	private void response400Error(OutputStream outputStream, String protocol) {
+		try {	
+			File file = new File("./webapp/error/400.html");
+			byte[] body = Files.readAllBytes(file.toPath());
+			outputStream.write( (protocol+" 400 Bad Request\r\n").getBytes("UTF-8"));
 			outputStream.write("Content-Type:text/html; charset=utf-8\r\n".getBytes("UTF-8"));
 			outputStream.write("\r\n".getBytes());
 			outputStream.write(body);
