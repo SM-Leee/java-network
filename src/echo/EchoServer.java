@@ -1,16 +1,11 @@
 package echo;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class EchoServer {
 	
@@ -25,49 +20,31 @@ public class EchoServer {
 			String ipAddress = inetAddress.getHostAddress();
 			
 			serverSocket.bind(new InetSocketAddress(ipAddress, PORT));
-			System.out.println("[server] 접속을 기다리는 중입니다."+ipAddress+":"+PORT);
+			log("binding"+ipAddress+":"+PORT);
 			
-			Socket socket = serverSocket.accept();
-			InetSocketAddress inetRemoteSocketAddress = (InetSocketAddress)socket.getRemoteSocketAddress();
-			String remoteIpAddress = inetRemoteSocketAddress.getAddress().getHostAddress();
-			int remotePort = inetRemoteSocketAddress.getPort();
-			System.out.println("[server] "+remoteIpAddress+":"+remotePort+"님이 접속하셨습니다.");
 			
-			try {
-				InputStream is = socket.getInputStream();
-				InputStreamReader isr = new InputStreamReader(is,"UTF-8");
-				BufferedReader br = new BufferedReader(isr);
-								
-				OutputStream os = socket.getOutputStream();
-				OutputStreamWriter osw = new OutputStreamWriter(os,"UTF-8");
-				PrintWriter pw = new PrintWriter(osw,true);
-				
-				while(true) {
-					String data = br.readLine();
-					if(data == null) {
-						System.out.println("[server] 클라이언트로 부터 연결끊김");
-						break;
-					}
-					System.out.println("[server] 데이터 수신 : "+data);
-					pw.println(data);
-				}
-				
-			} catch (IOException e) {
-				e.printStackTrace();
+			while(true) {
+				Socket socket = serverSocket.accept();
+				Thread thread = new echoServerReceiveThread(socket);
+				thread.start();
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			log("error : "+e);
+			
 		} finally {
 			try {
 				if(serverSocket != null && serverSocket.isClosed() == false) {
 					serverSocket.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				log("error : "+e);
 			}
 		}
 
 	}
 
+	public static void log(String log) {
+		System.out.println("[server#"+Thread.currentThread().getId()+"]"+log);
+	}
 }
