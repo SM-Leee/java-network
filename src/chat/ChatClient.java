@@ -1,0 +1,72 @@
+package chat;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class ChatClient {
+
+	private static final String SERVER_IP = "218.39.221.67";
+	private static final int PORT = 5000;
+
+	public static void main(String[] args) {
+		Scanner scanner = null;
+		Socket socket = null;
+
+		try {
+			scanner = new Scanner(System.in);
+			socket = new Socket();
+
+			socket.connect(new InetSocketAddress(SERVER_IP, PORT));
+
+			//BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+			PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"),true);
+
+			System.err.print("닉네임>>");
+			String nickname = scanner.nextLine();
+			printWriter.println("join:"+nickname);
+			printWriter.flush();
+			
+			while(true) {
+				new ChatClientThread(socket).start();	
+				System.out.print(">>");
+				String input = scanner.nextLine();
+
+				if("quit".equals(input)==true) {
+					printWriter.println("quit");
+					printWriter.flush();
+					break;
+				} else {
+					printWriter.println("message:"+nickname+":"+input);
+					printWriter.flush();
+				}
+			}
+
+		} catch (IOException e) {
+			log("Error : "+e);
+		} finally {
+			try {
+				if(socket != null && socket.isClosed()==false) {
+					socket.close();
+				}
+				if(scanner != null) {
+					scanner.close();
+				}
+			} catch (IOException e) {
+				log("Error : "+e);
+			}
+		}
+
+
+	}
+
+	public static void log(String log) {
+		System.out.println("[client #"+Thread.currentThread().getId()+"] "+log);
+	}
+
+}
