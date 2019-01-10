@@ -21,7 +21,7 @@ public class ChatClientThread extends Thread{
 			
 			while(true) {
 				String data = bufferedReader.readLine();
-				System.out.println(data);
+				System.out.println(">>"+data);
 				
 			}
 						

@@ -13,7 +13,8 @@ public class ChatClient {
 
 	private static final String SERVER_IP = "218.39.221.67";
 	private static final int PORT = 5000;
-
+	//private static final String SERVER_IP = "218.39.221.66";
+	//private static final int PORT = 5001;
 	public static void main(String[] args) {
 		Scanner scanner = null;
 		Socket socket = null;
@@ -34,7 +35,7 @@ public class ChatClient {
 			
 			while(true) {
 				new ChatClientThread(socket).start();	
-				System.out.print(">>");
+				
 				String input = scanner.nextLine();
 
 				if("quit".equals(input)==true) {
