@@ -39,22 +39,14 @@ public class ChatClientApp {
 			// response가 join ok 이면, 
 
 			ChatWindow cw = new ChatWindow(name,printWriter);
-
-			new ChatClientThread(cw, socket).start();												
-
-			cw.show();
+			
+				new ChatClientThread(cw, socket).start();												
+			
+				cw.show();
 
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if(socket != null && socket.isClosed() == false) {
-					socket.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 
 
