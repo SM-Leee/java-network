@@ -44,6 +44,6 @@ public class ChatServer {
 	}
 
 	public static void log(String log) {
-		System.out.println("[server"+Thread.currentThread().getId()+"]"+log);
+		System.out.println("[server #"+Thread.currentThread().getId()+"]"+log);
 	}
 }

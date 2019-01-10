@@ -48,7 +48,7 @@ public class ChatClient {
 			}
 
 		} catch (IOException e) {
-			log("Error : "+e);
+			e.printStackTrace();
 		} finally {
 			try {
 				if(socket != null && socket.isClosed()==false) {
@@ -58,15 +58,11 @@ public class ChatClient {
 					scanner.close();
 				}
 			} catch (IOException e) {
-				log("Error : "+e);
+				e.printStackTrace();
 			}
 		}
 
 
-	}
-
-	public static void log(String log) {
-		System.out.println("[client #"+Thread.currentThread().getId()+"] "+log);
 	}
 
 }

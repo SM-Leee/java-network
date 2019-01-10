@@ -24,12 +24,11 @@ public class ChatClientThread extends Thread{
 				System.out.println(data);
 				
 			}
-			
-			
+						
 		} catch (UnsupportedEncodingException e) {
-			ChatClient.log("Error : "+e);
+			e.printStackTrace();
 		} catch (IOException e) {
-			ChatClient.log("Error : "+e);
+			e.printStackTrace();
 		}
 		
 		
