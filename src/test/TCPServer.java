@@ -54,6 +54,12 @@ public class TCPServer {
 
 					// 6. 데이터 쓰기
 					os.write(data.getBytes("UTF-8"));
+					
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			} catch(SocketException e) {
 				System.out.println("[server] abnormal closed by Client");
