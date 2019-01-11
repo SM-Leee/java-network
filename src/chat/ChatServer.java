@@ -17,17 +17,21 @@ public class ChatServer {
 		List<Writer> listWriters = new ArrayList<Writer>();
 		try {
 			serverSocket = new ServerSocket();
-			
+
+			//1-1. set option SO_REUSEADDR
+
+			serverSocket.setReuseAddress(true);
+
 			InetAddress inetAddress = InetAddress.getLocalHost();
 			String localHostAddress = inetAddress.getHostAddress();
 			serverSocket.bind(new InetSocketAddress(localHostAddress, PORT));
 			log("binding "+localHostAddress+":"+PORT);
-			
+
 			while(true) {
 				Socket socket = serverSocket.accept();
 				new ChatServerThread(socket, listWriters).start();	
 			}
-			
+
 		} catch (IOException e) {
 			log("error : "+e);
 		} finally{
@@ -39,7 +43,7 @@ public class ChatServer {
 				log("error : "+e);
 			}
 		}
-		
+
 
 	}
 

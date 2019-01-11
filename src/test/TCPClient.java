@@ -14,7 +14,23 @@ public class TCPClient {
 		try {
 			// 1. 소켓 생성
 			socket = new Socket();
-
+			
+			//1.1 socket buffer size확인 
+			int receiveBufferSize = socket.getReceiveBufferSize();
+			int sendBufferedSize = socket.getSendBufferSize();
+			
+			System.out.println(receiveBufferSize+ ":"+sendBufferedSize);
+			
+			
+			//1-2. socket buffer size 변경
+			socket.setReceiveBufferSize(1024*10);
+			socket.setSendBufferSize(1024*10);
+			
+			receiveBufferSize = socket.getReceiveBufferSize();
+			sendBufferedSize = socket.getSendBufferSize();
+			
+			System.out.println(receiveBufferSize+ ":"+sendBufferedSize);
+			
 			// 2. 서버 연결
 			socket.connect(new InetSocketAddress(SERVER_IP, PORT));
 			System.out.println("[client] connected");
