@@ -14,7 +14,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.net.Socket;
 
 public class ChatWindow {
 
